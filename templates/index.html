@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鱼肉新鲜度检测</title>
+    <!-- 引入字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-font: 'Roboto', sans-serif;
+            --bg-gradient: linear-gradient(135deg, #6ED3CF, #90D4ED);
+            --white-translucent: rgba(255, 255, 255, 0.2);
+            --box-shadow-color: rgba(31, 38, 135, 0.37);
+            --text-shadow-color: rgba(0, 0, 0, 0.2);
+            --button-gradient-label: linear-gradient(135deg, #667eea, #764ba2);
+            --button-gradient-submit: linear-gradient(135deg, #f7971e, #ffd200);
+            --gold-color: #FFD700;
+        }
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--primary-font);
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 背景动画 */
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in-out;
+        }
+        /* 优化气泡的样式 */
+        .bubble:nth-child(1) { left: 10%; width: 40px; height: 40px; }
+        .bubble:nth-child(2) { left: 20%; width: 60px; height: 60px; animation-duration: 12s; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 40%; width: 20px; height: 20px; animation-duration: 8s; animation-delay: 4s; }
+        .bubble:nth-child(4) { left: 60%; width: 50px; height: 50px; animation-duration: 14s; animation-delay: 6s; }
+        .bubble:nth-child(5) { left: 80%; width: 30px; height: 30px; animation-duration: 11s; animation-delay: 8s; }
+        @keyframes rise {
+            0% { bottom: -50px; transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(30px) rotate(180deg); }
+            100% { bottom: 110vh; transform: translateX(-30px) rotate(360deg); }
+        }
+        #wrapper {
+            background: var(--white-translucent);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px var(--box-shadow-color);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            z-index: 1;
+            transition: box-shadow 0.3s ease;
+        }
+        #wrapper:hover {
+            box-shadow: 0 12px 40px var(--box-shadow-color);
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px var(--text-shadow-color);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+            margin-top: 15px;
+            border: none;
+            outline: none;
+        }
+        .btn-label {
+            background: var(--button-gradient-label);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        }
+        .btn-submit {
+            background: var(--button-gradient-submit);
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.4);
+            margin-left: 10px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(247, 151, 30, 0.6);
+        }
+        #message {
+            margin-top: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--gold-color);
+            text-shadow: 1px 1px 2px var(--text-shadow-color);
+        }
+        /* 图片预览样式 */
+        #preview {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        #preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            #wrapper {
+                padding: 20px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            #message {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景动画元素 -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <section id="wrapper">
+        <h1>上传鱼肉照片以检测其新鲜度</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <label for="file" class="btn btn-label">选择图片</label>
+            <button type="submit" class="btn btn-submit">提交</button>
+        </form>
+        <!-- 图片预览区域 -->
+        <div id="preview"></div>
+        <div id="message" role="alert">新鲜度结果将在此显示。</div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('file');
+            const preview = document.getElementById('preview');
+            const message = document.getElementById('message');
+            const uploadForm = document.getElementById('uploadForm');
+
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    // 检查文件类型
+                    if (!file.type.startsWith('image/')) {
+                        message.textContent = '请选择有效的图片文件。';
+                        fileInput.value = '';
+                        preview.innerHTML = '';
+                        return;
+                    }
+
+                    // 显示图片预览
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.innerHTML = `<img src="${e.target.result}" alt="图片预览">`;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.innerHTML = '';
+                }
+            });
+
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (fileInput.files.length === 0) {
+                    message.textContent = '请选择要上传的文件。';
+                    return;
+                }
+
+                const file = fileInput.files[0];
+
+                // 检查文件大小（限制为5MB）
+                const maxSizeInBytes = 5 * 1024 * 1024;
+                if (file.size > maxSizeInBytes) {
+                    message.textContent = '文件大小不能超过5MB。';
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                message.textContent = '正在分析，请稍候...';
+
+                try {
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.predicted_label) {
+                            message.textContent = '新鲜度等级: ' + data.predicted_label;
+                        } else {
+                            message.textContent = '服务器返回了无效的响应。';
+                        }
+                    } else {
+                        message.textContent = '文件上传失败。';
+                    }
+                } catch (error) {
+                    message.textContent = '请求过程中发生错误。';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
