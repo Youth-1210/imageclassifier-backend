@@ -8,7 +8,7 @@ app = Flask(__name__)
 # 配置参数
 MODEL_PATH = 'best_model.pth'  # 使用最佳模型
 NUM_CLASSES = 6  # 根据实际类别数修改
-CLASS_LABELS = ['Fresh_0H', 'Fresh_5H', 'Fresh_10H', 'Fresh_15H', 'Fresh_20H', 'Fresh_25H']  # 根据实际类别标签修改
+CLASS_LABELS = ['Fresh', 'Fresh', 'Fresh', 'NOT Fresh', 'ROT', 'ROT']  # 根据实际类别标签修改
 
 # 初始化模型分类器
 classifier = ImageClassifier(
