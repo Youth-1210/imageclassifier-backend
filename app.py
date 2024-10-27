@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
 from inference import ImageClassifier
+import os
 
 app = Flask(__name__)
 
@@ -41,4 +42,5 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)  # 绑定到所有网络接口
+    port = int(os.environ.get("PORT", 5000))  # 获取环境变量PORT指定的端口，默认5000
+    app.run(host='0.0.0.0', port=port)
